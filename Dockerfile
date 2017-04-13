@@ -2,7 +2,7 @@ FROM debian:jessie
 MAINTAINER Guilherme Barile <gui@bravado.com.br>
 
 # add non-free repository
-RUN echo "deb http://httpredir.debian.org/debian jessie contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://http.us.debian.org/debian jessie contrib non-free" >> /etc/apt/sources.list
 
 # add newrelic repository
 RUN echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' > /etc/apt/sources.list.d/newrelic.list
