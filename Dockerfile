@@ -31,6 +31,7 @@ RUN apt-get update && \
     php5-sqlite \
     php5-intl \
     php5-imap \
+    php5-redis \
     php5 \
     php-pear \
     unzip curl \
