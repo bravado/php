@@ -3,8 +3,8 @@
 # Delete old pid files
 /usr/bin/find /var/run/ -type f -name '*.pid' -delete
 
-# Run init.d
-for i in /init.d/*.sh; do
+# Run entrypoint.d
+for i in /etc/entrypoint.d/*.sh; do
     bash $i
 done
 
