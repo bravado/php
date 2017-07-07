@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM bravado/debian
 MAINTAINER Guilherme Barile <gui@bravado.com.br>
 
 # add non-free repository
@@ -14,8 +14,7 @@ RUN apt-key add /tmp/newrelic.gpg
 # Update the package lists and install everything
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends locales supervisor \
-    ca-certificates \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends  \
     apache2 \
     apache2-mpm-event \
     libapache2-mod-fastcgi \
@@ -34,7 +33,6 @@ RUN apt-get update && \
     php5-redis \
     php5 \
     php-pear \
-    unzip curl \
     && cd /opt && apt-get download newrelic-daemon newrelic-php5 newrelic-php5-common \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/*.log
 
@@ -58,13 +56,6 @@ RUN echo "America/Sao_Paulo" > /etc/timezone && dpkg-reconfigure -f noninteracti
 # container parameters that may be set at runtime
 ENV NR_APP_NAME ""
 ENV NR_INSTALL_KEY ""
-
-# Set the locale
-ENV LANG C.UTF-8
-ENV LANGUAGE C.UTF-8
-ENV LC_ALL C.UTF-8
-
-RUN localedef -i pt_BR -f UTF-8 pt_BR.UTF-8
 
 ENV PUID 1000
 ENV PGID 1000
@@ -112,7 +103,3 @@ ENV APC_SHM_SIZE 128M
 EXPOSE 80
 
 ADD etc /etc
-
-RUN chmod +x /etc/entrypoint.sh
-
-ENTRYPOINT [ "/etc/entrypoint.sh" ]
