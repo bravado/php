@@ -103,5 +103,3 @@ ENV APC_SHM_SIZE 128M
 EXPOSE 80
 
 ADD etc /etc
-
-ENTRYPOINT [ '/etc/entrypoint.sh' ]
