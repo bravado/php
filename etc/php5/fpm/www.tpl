@@ -362,7 +362,7 @@ catch_workers_output = $PHP_CATCH_WORKERS_OUTPUT
 
 ; Default Value: nothing is defined by default except the values in php.ini and
 ;                specified at startup with the -d argument
-;php_admin_value[sendmail_path] = /usr/sbin/sendmail -t -i -f www@my.domain.com
+php_admin_value[sendmail_path] = "/usr/sbin/sendmail -t -i"
 php_flag[display_errors] = Off
 php_flag[display_startup_errors] = Off
 php_admin_value[memory_limit] = $PHP_MEMORY_LIMIT

@@ -1,5 +1,4 @@
 FROM bravado/debian
-MAINTAINER Guilherme Barile <gui@bravado.com.br>
 
 # add non-free repository
 RUN echo "deb http://http.us.debian.org/debian jessie contrib non-free" >> /etc/apt/sources.list
@@ -33,6 +32,7 @@ RUN apt-get update && \
     php5-redis \
     php5 \
     php-pear \
+    ssmtp \
     && cd /opt && apt-get download newrelic-daemon newrelic-php5 newrelic-php5-common \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/*.log
 
