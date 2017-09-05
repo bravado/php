@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-tag=${1:-latest}
-cid=$(docker run -d --rm -v $(pwd)/tests:/var/www/html bravado/apache:${tag})
-
+cid=$(docker run -d -v $(pwd)/tests:/var/www/html ${1}:${2:-latest})
 
 ip=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $cid)
 
@@ -10,9 +8,8 @@ sleep 5
 
 out=$(curl $ip/phpinfo.php)
 
-docker logs $cid
-
 echo $out
 
+docker logs $cid;
 
-docker stop $cid
+docker stop $cid && docker rm -v $cid

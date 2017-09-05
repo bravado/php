@@ -1,27 +1,9 @@
 #!/usr/bin/env bash
-# Check if php is configured
-if [ ! -f /etc/php5/fpm/pool.d/www.conf ]; then
 
-  sed -ie "s/\(max_execution_time\ =\ \).*/\1$PHP_MAX_EXECUTION_TIME/" /etc/php5/fpm/php.ini
-
-  sed -e "s;\$PHP_LISTEN;$PHP_LISTEN;g" \
-      -e "s;\$PHP_MEMORY_LIMIT;$PHP_MEMORY_LIMIT;g" \
-      -e "s;\$PHP_MAX_SPARE_SERVERS;$PHP_MAX_SPARE_SERVERS;g" \
-      -e "s;\$PHP_MIN_SPARE_SERVERS;$PHP_MIN_SPARE_SERVERS;g" \
-      -e "s;\$PHP_START_SERVERS;$PHP_START_SERVERS;g" \
-      -e "s;\$PHP_MAX_CHILDREN;$PHP_MAX_CHILDREN;g" \
-      -e "s;\$PHP_SESSION_SAVE_HANDLER;$PHP_SESSION_SAVE_HANDLER;g" \
-      -e "s;\$PHP_SESSION_SAVE_PATH;$PHP_SESSION_SAVE_PATH;g" \
-      -e "s;\$PHP_POST_MAX_SIZE;$PHP_POST_MAX_SIZE;g" \
-      -e "s;\$PHP_UPLOAD_MAX_FILESIZE;$PHP_UPLOAD_MAX_FILESIZE;g" \
-      -e "s;\$PHP_CATCH_WORKERS_OUTPUT;$PHP_CATCH_WORKERS_OUTPUT;g" \
-      -e "s;\$PHP_MAX_REQUESTS;$PHP_MAX_REQUESTS;g" \
-      -e "s;\$PHP_MAX_INPUT_VARS;$PHP_MAX_INPUT_VARS;g" \
-      -e "s;\$PHP_SHORT_OPEN_TAG;$PHP_SHORT_OPEN_TAG;g" \
-      /etc/php5/fpm/www.tpl > /etc/php5/fpm/pool.d/www.conf
+sed -ie "s/\(max_execution_time\ =\ \).*/\1$PHP_MAX_EXECUTION_TIME/" /etc/php/7.2/apache2/php.ini
 
 # Configure opcache
-cat << EOF > /etc/php5/mods-available/opcache.ini
+cat << EOF > /etc/php/7.2/apache2/conf.d/10-opcache.ini
 zend_extension=opcache.so
 
 opcache.enable=$OPCACHE_ENABLE
@@ -36,9 +18,24 @@ opcache.save_comments=$OPCACHE_SAVE_COMMENTS
 EOF
 
 # Configure apcu
-cat << EOF > /etc/php5/mods-available/apcu.ini
+cat << EOF > /etc/php/7.2/apache2/conf.d/20-apcu.ini
 extension=apcu.so
 apc.shm_size=$APC_SHM_SIZE
 EOF
 
+# Check if newrelic should be configured
+if [[ ! -z "$NR_INSTALL_KEY" ]] && [[ ! -f /etc/php/7.2/apache2/conf.d/20-newrelic.ini ]]; then
+    [ -z "$NR_APP_NAME" ] && NR_APP_NAME=app@`hostname`
+    cat << EOF > /etc/php/7.2/mods-available/newrelic.ini
+extension = "newrelic.so"
+
+[newrelic]
+newrelic.license = "$NR_INSTALL_KEY"
+newrelic.logfile = "/dev/stderr"
+newrelic.appname = "$NR_APP_NAME"
+newrelic.daemon.logfile = "/dev/stderr"
+
+EOF
+    ln -s /etc/php/7.2/mods-available/newrelic.ini /etc/php/7.2/apache2/conf.d/20-newrelic.ini
 fi
+# end newrelic configuration

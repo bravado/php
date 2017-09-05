@@ -39,8 +39,8 @@ listen = $PHP_LISTEN
 ; BSD-derived systems allow connections regardless of permissions.
 ; Default Values: user and group are set as the running user
 ;                 mode is set to 0666
-listen.owner = www-data
-listen.group = www-data
+listen.owner = $PHP_USER
+listen.group = $PHP_GROUP
 listen.mode = 0660
 
 ; Choose how the process manager will control the number of child processes.

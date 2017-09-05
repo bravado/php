@@ -1,12 +1,21 @@
 .PHONY: build push build-mailout push-mailout
-
+DOCKER_IMAGE ?= registry.gitlab.com/prosoma/php
 default: build
 
-build:
-	docker build -t bravado/apache:php5 .
+init:
+	$(eval GIT_BRANCH=$(shell git rev-parse --abbrev-ref HEAD))
 
-push: build
-	docker push bravado/apache:php5
+build: init
+	docker build -t ${DOCKER_IMAGE}:${GIT_BRANCH} .
 
 test: build
-	bash test.sh php5
+	bash test.sh ${DOCKER_IMAGE} ${GIT_BRANCH}
+
+run: PUID=1000
+run: PGID=1000
+run: USER=app
+run: init
+	docker run -it --user=${USER} --rm -e NR_INSTALL_KEY=asdf -e PUID=${PUID} -e PGID=${PGID} ${DOCKER_IMAGE}:${GIT_BRANCH} ${CMD}
+
+push: init
+	docker push ${DOCKER_IMAGE}:${GIT_BRANCH}
