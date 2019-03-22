@@ -4,11 +4,8 @@ FROM bravado/debian:jessie
 RUN echo "deb http://http.us.debian.org/debian jessie contrib non-free" >> /etc/apt/sources.list
 
 # add newrelic repository
-RUN echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' > /etc/apt/sources.list.d/newrelic.list
-
-# trust in newrelic key
-ADD https://download.newrelic.com/548C16BF.gpg /tmp/newrelic.gpg
-RUN apt-key add /tmp/newrelic.gpg
+RUN curl https://download.newrelic.com/548C16BF.gpg | apt-key add - \
+	&& echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' > /etc/apt/sources.list.d/newrelic.list
 
 # Update the package lists and install everything
 RUN apt-get update && \
@@ -102,5 +99,10 @@ ENV APC_SHM_SIZE 128M
 # end of parameters
 
 EXPOSE 80
+
+ENV SMTP_SERVER mailout
+ENV SMTP_USER ""
+ENV SMTP_PASS ""
+ENV SMTP_METHOD LOGIN
 
 ADD etc /etc

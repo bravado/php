@@ -3,10 +3,10 @@
 default: build
 
 build:
-	docker build -t bravado/apache .
+	docker build -t bravado/apache:php5 .
 
 push: build
-	docker push bravado/apache
+	docker push bravado/apache:php5
 
 test: build
-	bash test.sh
+	bash test.sh php5
