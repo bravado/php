@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/prosoma/debian:stretch-dev
+FROM registry.gitlab.com/prosoma/debian:stretch
 
 USER root
 
