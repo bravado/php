@@ -54,6 +54,8 @@ RUN a2enmod actions expires headers rewrite proxy setenvif \
     && rm /etc/php/7.2/apache2/conf.d/20-newrelic.ini \
     && rm /var/www/html/index.html
 
+RUN usermod -a -G www-data app; chown -R app /var/www
+
 # container parameters that may be set at runtime
 ENV NR_APP_NAME ""
 ENV NR_INSTALL_KEY ""
