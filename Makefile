@@ -1,5 +1,5 @@
 .PHONY: build push build-mailout push-mailout
-DOCKER_IMAGE ?= registry.gitlab.com/prosoma/php
+DOCKER_IMAGE ?= bravado/php
 default: build
 
 init:
@@ -14,11 +14,12 @@ test: build
 run: PUID=1000
 run: PGID=1000
 run: USER=app
+run: PORT=8080
 run: init
-	docker run -it --user=${USER} --rm -e NR_INSTALL_KEY=asdf -e PUID=${PUID} -e PGID=${PGID} ${DOCKER_IMAGE}:${GIT_BRANCH} ${CMD}
+	docker run -it --user=${USER} --rm -e NR_INSTALL_KEY=asdf -p ${PORT}:80 -e PUID=${PUID} -v ${PWD}/tests:/var/www/html -e PGID=${PGID} ${DOCKER_IMAGE}:${GIT_BRANCH} ${CMD}
 
 pull:
-	docker pull registry.gitlab.com/prosoma/debian:stretch
+	docker pull bravado/debian:stretch
 
 push: init
 	docker push ${DOCKER_IMAGE}:${GIT_BRANCH}

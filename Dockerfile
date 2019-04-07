@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/prosoma/debian:stretch
+FROM bravado/debian:stretch
 
 USER root
 
@@ -54,6 +54,8 @@ RUN a2enmod actions expires headers rewrite proxy setenvif \
     && rm /etc/php/5.6/apache2/conf.d/20-newrelic.ini \
     && rm /var/www/html/index.html
 
+RUN usermod -a -G www-data app; chown -R app /var/www
+
 # container parameters that may be set at runtime
 ENV NR_APP_NAME ""
 ENV NR_INSTALL_KEY ""
@@ -69,14 +71,7 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_DOCUMENT_ROOT /var/www/html
 
 # PHP vars
-ENV PHP_LISTEN /var/run/php5-fpm.sock
 ENV PHP_MEMORY_LIMIT 128M
-ENV PHP_MAX_SPARE_SERVERS 6
-ENV PHP_MIN_SPARE_SERVERS 2
-ENV PHP_MAX_REQUESTS 0
-ENV PHP_START_SERVERS 4
-ENV PHP_MAX_CHILDREN 10
-ENV PHP_CATCH_WORKERS_OUTPUT no
 ENV PHP_SESSION_SAVE_HANDLER files
 ENV PHP_SESSION_SAVE_PATH /var/lib/php/sessions
 ENV PHP_UPLOAD_MAX_FILESIZE 50M
