@@ -51,7 +51,7 @@ RUN a2enmod actions expires headers rewrite proxy setenvif \
     && sed -ie 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php/7.2/apache2/php.ini \
     && sed -ie 's/${APACHE_LOG_DIR}\/error.log/\/proc\/self\/fd\/2/' /etc/apache2/apache2.conf \
     && rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf \
-    && rm /etc/php/7.2/apache2/conf.d/20-newrelic.ini \
+    && rm /etc/php/7.2/apache2/conf.d/20-newrelic.ini /etc/php/7.2/cli/conf.d/20-newrelic.ini \
     && rm /var/www/html/index.html
 
 RUN usermod -a -G www-data app; chown -R app /var/www
