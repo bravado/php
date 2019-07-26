@@ -1,12 +1,15 @@
-.PHONY: build push build-mailout push-mailout
-DOCKER_IMAGE ?= registry.gitlab.com/prosoma/php
+DOCKER_IMAGE ?= bravado/php
+GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
+DOCKER_TAG ?= $(DOCKER_IMAGE):$(GIT_BRANCH)
+
+.PHONY: build push test build-dev
 default: build
 
-init:
-	$(eval GIT_BRANCH=$(shell git rev-parse --abbrev-ref HEAD))
+build:
+	docker build --cache-from ${DOCKER_TAG} -t ${DOCKER_TAG} .
 
-build: init
-	docker build -t ${DOCKER_IMAGE}:${GIT_BRANCH} .
+build-dev:
+	docker build --cache-from ${DOCKER_TAG}-dev -t ${DOCKER_TAG}-dev -f Dockerfile.dev .
 
 test: build
 	bash test.sh ${DOCKER_IMAGE} ${GIT_BRANCH}
@@ -14,11 +17,10 @@ test: build
 run: PUID=1000
 run: PGID=1000
 run: USER=app
-run: init
-	docker run -it --user=${USER} --rm -e NR_INSTALL_KEY=asdf -e PUID=${PUID} -e PGID=${PGID} ${DOCKER_IMAGE}:${GIT_BRANCH} ${CMD}
+run:
+	docker run -it --user=${USER} --rm -e PUID=${PUID} -e PGID=${PGID} ${DOCKER_TAG} ${CMD}
 
 pull:
-	docker pull registry.gitlab.com/prosoma/debian:stretch
-
-push: init
-	docker push ${DOCKER_IMAGE}:${GIT_BRANCH}
+	docker pull bravado/debian:stretch
+	docker pull ${DOCKER_TAG}
+	docker pull ${DOCKER_TAG}-dev

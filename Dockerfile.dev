@@ -1,0 +1,31 @@
+FROM registry.gitlab.com/prosoma/php:7.3
+
+USER root
+
+RUN export DEBIAN_FRONTEND=noninteractive && \
+	curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+	echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
+	curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+	apt-get install -y --no-install-recommends graphviz nodejs vim yarn git php7.3-dev php-pear make && \
+	pecl install xdebug && \
+	apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+
+# Installing '/usr/lib/php/20170718/xdebug.so'
+# install ok: channel://pecl.php.net/xdebug-2.7.0
+# configuration option "php_ini" is not set to php.ini location
+# You should add "zend_extension=/usr/lib/php/20170718/xdebug.so" to php.ini
+
+# install composer
+RUN curl -L https://getcomposer.org/installer | php -- --install-dir=/usr/bin
+
+# enable dev modules
+RUN a2enmod vhost_alias ssl
+
+# generate dummy certificate
+RUN openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
+	-subj "/C=BR/ST=Sao_Paulo/L=Sao_Paulo/O=Prosoma/CN=*.localhost" \
+	-keyout /etc/apache2/ssl.key -out /etc/apache2/ssl.crt
+
+ADD etc.dev/ /etc/
+
+USER app

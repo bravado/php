@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/prosoma/debian:stretch
+FROM bravado/debian:stretch
 
 USER root
 
@@ -18,26 +18,26 @@ RUN apt-get update && \
   DEBIAN_FRONTEND="noninteractive" apt-get upgrade -y && \
   DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends  \
     apache2 \
-    libapache2-mod-php7.2 \
-    php7.2-apcu \
-    php7.2-bz2 \
-    php7.2-cli \
-    php7.2-curl \
-    php7.2-gd \
-    php7.2-ldap \
-    php7.2-memcache \
-    php7.2-mysqlnd \
-    php7.2-mbstring \
-    php7.2-imagick \
-    php7.2-imap \
-    php7.2-intl \
-    php7.2-pgsql \
-    php7.2-redis \
-    php7.2-soap \
-    php7.2-sqlite3 \
-    php7.2-xml \
-    php7.2-zip \
-    php7.2 \
+    libapache2-mod-php7.3 \
+    php7.3-apcu \
+    php7.3-bz2 \
+    php7.3-cli \
+    php7.3-curl \
+    php7.3-gd \
+    php7.3-ldap \
+    php7.3-memcache \
+    php7.3-mysqlnd \
+    php7.3-mbstring \
+    php7.3-imagick \
+    php7.3-imap \
+    php7.3-intl \
+    php7.3-pgsql \
+    php7.3-redis \
+    php7.3-soap \
+    php7.3-sqlite3 \
+    php7.3-xml \
+    php7.3-zip \
+    php7.3 \
     python \
     newrelic-daemon newrelic-php5 newrelic-php5-common \
     ssmtp \
@@ -47,11 +47,11 @@ RUN apt-get update && \
 # Setup logging to stderr
 # Enable apache modules
 RUN a2enmod actions expires headers rewrite proxy setenvif \
-    && sed -ie 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php/7.2/cli/php.ini \
-    && sed -ie 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php/7.2/apache2/php.ini \
+    && sed -ie 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php/7.3/cli/php.ini \
+    && sed -ie 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php/7.3/apache2/php.ini \
     && sed -ie 's/${APACHE_LOG_DIR}\/error.log/\/proc\/self\/fd\/2/' /etc/apache2/apache2.conf \
     && rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf \
-    && rm /etc/php/7.2/apache2/conf.d/20-newrelic.ini /etc/php/7.2/cli/conf.d/20-newrelic.ini \
+    && rm /etc/php/7.3/apache2/conf.d/20-newrelic.ini /etc/php/7.3/cli/conf.d/20-newrelic.ini \
     && rm /var/www/html/index.html
 
 RUN usermod -a -G www-data app; chown -R app /var/www

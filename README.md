@@ -1,4 +1,4 @@
-# prosoma/php
+# bravado/php
 
 Base Apache and PHP distribution.
 
