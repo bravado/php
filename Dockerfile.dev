@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/prosoma/php:7.3
+FROM bravado/php:7.3
 
 USER root
 

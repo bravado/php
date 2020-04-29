@@ -47,8 +47,6 @@ RUN apt-get update && \
 # Setup logging to stderr
 # Enable apache modules
 RUN a2enmod actions expires headers rewrite proxy setenvif \
-    && sed -ie 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php/7.3/cli/php.ini \
-    && sed -ie 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php/7.3/apache2/php.ini \
     && sed -ie 's/${APACHE_LOG_DIR}\/error.log/\/proc\/self\/fd\/2/' /etc/apache2/apache2.conf \
     && rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf \
     && rm /etc/php/7.3/apache2/conf.d/20-newrelic.ini /etc/php/7.3/cli/conf.d/20-newrelic.ini \
@@ -79,6 +77,7 @@ ENV PHP_POST_MAX_SIZE 50M
 ENV PHP_SHORT_OPEN_TAG On
 ENV PHP_MAX_INPUT_VARS 1000
 ENV PHP_MAX_EXECUTION_TIME 30
+ENV PHP_TIMEZONE America/Sao_Paulo
 
 # Opcache
 ENV OPCACHE_ENABLE 1
