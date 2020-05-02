@@ -21,6 +21,7 @@ RUN apt-get update && \
     libapache2-mod-php7.3 \
     php7.3-apcu \
     php7.3-bz2 \
+    php7.3-bcmath \
     php7.3-cli \
     php7.3-curl \
     php7.3-gd \
