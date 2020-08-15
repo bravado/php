@@ -16,7 +16,7 @@ run: PGID=1000
 run: USER=app
 run: PORT=8080
 run: init
-	docker run -it --user=${USER} --rm -e NR_INSTALL_KEY=asdf -p ${PORT}:80 -e PUID=${PUID} -v ${PWD}/tests:/var/www/html -e PGID=${PGID} ${DOCKER_IMAGE}:${GIT_BRANCH} ${CMD}
+	docker run -it --user=${USER} --rm -e NR_INSTALL_KEY=asdf -e SMTP_USER=user -e SMTP_PASS=pass -p ${PORT}:80 -e PUID=${PUID} -v ${PWD}/tests:/var/www/html -e PGID=${PGID} ${DOCKER_IMAGE}:${GIT_BRANCH} ${CMD}
 
 pull:
 	docker pull bravado/debian:stretch
