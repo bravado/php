@@ -6,21 +6,22 @@ DOCKER_TAG ?= $(DOCKER_IMAGE):$(GIT_BRANCH)
 default: build
 
 build:
-	docker build --cache-from ${DOCKER_TAG} -t ${DOCKER_TAG} .
+	docker build -t ${DOCKER_TAG} .
 
 build-dev:
-	docker build --cache-from ${DOCKER_TAG}-dev -t ${DOCKER_TAG}-dev -f Dockerfile.dev .
+	docker build -t ${DOCKER_TAG}-dev -f Dockerfile.dev .
 
 test: build
 	bash test.sh ${DOCKER_IMAGE} ${GIT_BRANCH}
 
-run: PUID=1000
-run: PGID=1000
-run: USER=app
-run:
-	docker run -it --user=${USER} --rm -e PUID=${PUID} -e PGID=${PGID} ${DOCKER_TAG} ${CMD}
+start:
+	docker-compose up -d
+
+logs:
+	docker-compose logs -f
+
+shell:
+	docker-compose exec php bash
 
 pull:
-	docker pull bravado/debian:stretch
-	docker pull ${DOCKER_TAG}
-	docker pull ${DOCKER_TAG}-dev
+	docker pull bravado/debian:buster

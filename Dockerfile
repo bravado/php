@@ -1,13 +1,13 @@
-FROM bravado/debian:stretch
+FROM bravado/debian:buster
 
 USER root
 
 # add non-free repository
-RUN echo "deb http://http.us.debian.org/debian stretch contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://http.us.debian.org/debian buster contrib non-free" >> /etc/apt/sources.list
 
 # add php repository
 RUN curl -L https://packages.sury.org/php/apt.gpg | apt-key add - \
-	&& echo "deb https://packages.sury.org/php/ stretch main" > /etc/apt/sources.list.d/php.list
+	&& echo "deb https://packages.sury.org/php/ buster main" > /etc/apt/sources.list.d/php.list
 
 # add newrelic repository
 RUN curl https://download.newrelic.com/548C16BF.gpg | apt-key add - \
@@ -41,7 +41,7 @@ RUN apt-get update && \
     php7.3 \
     python \
     newrelic-daemon newrelic-php5 newrelic-php5-common \
-    ssmtp \
+    msmtp-mta \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/*.log
 
 # Set the default timezone in cli and fpm configs
@@ -99,7 +99,8 @@ EXPOSE 80
 ENV SMTP_SERVER mailout
 ENV SMTP_USER ""
 ENV SMTP_PASS ""
-ENV SMTP_METHOD LOGIN
+ENV SMTP_METHOD login
+ENV SMTP_DOMAIN bravado.cloud
 
 ADD etc /etc
 
