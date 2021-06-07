@@ -2,7 +2,7 @@ version: '3'
 
 services:
   php:
-    image: bravado/php:7.3
+    image: bravado/php:7.4
     environment:
       - SMTP_SERVER
       - SMTP_USER

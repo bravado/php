@@ -18,27 +18,28 @@ RUN apt-get update && \
   DEBIAN_FRONTEND="noninteractive" apt-get upgrade -y && \
   DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends  \
     apache2 \
-    libapache2-mod-php7.3 \
-    php7.3-apcu \
-    php7.3-bz2 \
-    php7.3-bcmath \
-    php7.3-cli \
-    php7.3-curl \
-    php7.3-gd \
-    php7.3-ldap \
-    php7.3-memcache \
-    php7.3-mysqlnd \
-    php7.3-mbstring \
-    php7.3-imagick \
-    php7.3-imap \
-    php7.3-intl \
-    php7.3-pgsql \
-    php7.3-redis \
-    php7.3-soap \
-    php7.3-sqlite3 \
-    php7.3-xml \
-    php7.3-zip \
-    php7.3 \
+    libapache2-mod-php7.4 \
+    php7.4-apcu \
+    php7.4-bz2 \
+    php7.4-bcmath \
+    php7.4-cli \
+    php7.4-curl \
+    php7.4-gd \
+    php7.4-gmp \
+    php7.4-ldap \
+    php7.4-memcache \
+    php7.4-mysqlnd \
+    php7.4-mbstring \
+    php7.4-imagick \
+    php7.4-imap \
+    php7.4-intl \
+    php7.4-pgsql \
+    php7.4-redis \
+    php7.4-soap \
+    php7.4-sqlite3 \
+    php7.4-xml \
+    php7.4-zip \
+    php7.4 \
     python \
     newrelic-daemon newrelic-php5 newrelic-php5-common \
     msmtp-mta \
@@ -50,7 +51,7 @@ RUN apt-get update && \
 RUN a2enmod actions expires headers rewrite proxy setenvif \
     && sed -ie 's/${APACHE_LOG_DIR}\/error.log/\/proc\/self\/fd\/2/' /etc/apache2/apache2.conf \
     && rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf \
-    && rm /etc/php/7.3/apache2/conf.d/20-newrelic.ini /etc/php/7.3/cli/conf.d/20-newrelic.ini \
+    && rm /etc/php/7.4/apache2/conf.d/20-newrelic.ini /etc/php/7.4/cli/conf.d/20-newrelic.ini \
     && rm /var/www/html/index.html
 
 RUN usermod -a -G www-data app; chown -R app /var/www
