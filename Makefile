@@ -8,8 +8,14 @@ default: build
 build:
 	docker build -t ${DOCKER_TAG} .
 
+push: build
+	docker push ${DOCKER_TAG}
+
 build-dev:
 	docker build -t ${DOCKER_TAG}-dev -f Dockerfile.dev .
+
+push-dev: build-dev
+	docker push ${DOCKER_TAG}-dev
 
 test: build
 	bash test.sh ${DOCKER_IMAGE} ${GIT_BRANCH}
